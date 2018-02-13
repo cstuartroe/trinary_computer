@@ -21,9 +21,40 @@ class tryte:
     def __eq__(self, other):
         try:
             assert(not isinstance(other,tryte))
-            raise TypeError('Invalid arguments for __eq__: tryte and %s' % str(type(other)))
+            raise TypeError('Invalid arguments for __eq__: tryte and %s' % str(type(other).__name__))
         except AssertionError:
             return all(self.list[i] == other.list[i] for i in range(3))
 
     def __int__(self):
         return (int(self.list[0]) * 729) + (int(self.list[1]) * 27) + int(self.list[2])
+
+    def __add__(self, other):
+        try:
+            assert(not isinstance(other,tryte))
+            raise TypeError('Invalid arguments for __add__: tryte and %s' % str(type(other).__name__))
+        except AssertionError:
+            out = []
+            carry = trigit(0)
+            for i in range(2,-1,-1):
+                add = self.list[i] + other.list[i]
+                overflow = self.list[i].overflow(other.list[i])
+                out.insert(0,carry + add)
+                carry = overflow + carry.overflow(add)
+            return tryte(out)
+
+    def overflow(self, other):
+        try:
+            assert(not isinstance(other,tryte))
+            raise TypeError('Invalid arguments for __add__: tryte and %s' % str(type(other).__name__))
+        except AssertionError:
+            out = []
+            carry = trigit(0)
+            for i in range(2,-1,-1):
+                add = self.list[i] + other.list[i]
+                overflow = self.list[i].overflow(other.list[i])
+                out.insert(0,carry + add)
+                carry = overflow + carry.overflow(add)
+            return tryte([trigit(0),trigit(0),carry])
+
+    def trits(self):
+        return ''.join(trigit.trits() for trigit in self.list)

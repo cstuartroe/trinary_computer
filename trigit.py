@@ -36,7 +36,7 @@ class trigit:
     def __eq__(self,other):
         try:
             assert(not isinstance(other,trigit))
-            raise TypeError('Invalid arguments for __eq__: trigit and %s' % str(type(other)))
+            raise TypeError('Invalid arguments for __eq__: trigit and %s' % str(type(other).__name__))
         except AssertionError:
             return all(self.list[i] == other.list[i] for i in range(3))
 
@@ -46,7 +46,7 @@ class trigit:
     def __add__(self, other):
         try:
             assert(not isinstance(other,trigit))
-            raise TypeError('Invalid arguments for __add__: trigit and %s' % str(type(other)))
+            raise TypeError('Invalid arguments for __add__: trigit and %s' % str(type(other).__name__))
         except AssertionError:
             out = []
             carry = trit(0)
@@ -55,3 +55,17 @@ class trigit:
                 overflow = self.list[i].overflow(other.list[i])
                 out.insert(0,carry + add)
                 carry = overflow + carry.overflow(add)
+            return trigit(out)
+
+    def overflow(self, other):
+        out = []
+        carry = trit(0)
+        for i in range(2,-1,-1):
+            add = self.list[i] + other.list[i]
+            overflow = self.list[i].overflow(other.list[i])
+            out.insert(0,carry + add)
+            carry = overflow + carry.overflow(add)
+        return trigit([trit(0),trit(0),carry])
+
+    def trits(self):
+        return ''.join(str(trit) for trit in self.list)

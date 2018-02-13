@@ -20,7 +20,7 @@ class trit:
     def __eq__(self, other):
         try:
             assert(not isinstance(other,trit))
-            raise TypeError('Invalid arguments for __eq__: trit and %s' % str(type(other)))
+            raise TypeError('Invalid arguments for __eq__: trit and %s' % str(type(other).__name__))
         except AssertionError:
             return self.d == other.d
 
@@ -30,7 +30,7 @@ class trit:
     def __add__(self,other):
         try:
             assert(not isinstance(other,trit))
-            raise TypeError('Invalid arguments for __add__: trit and %s' % str(type(other)))
+            raise TypeError('Invalid arguments for __add__: trit and %s' % str(type(other).__name__))
         except AssertionError:
             n = (self.d + other.d)%3
             return trit(-1 if n==2 else n)
